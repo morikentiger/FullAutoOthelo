@@ -7,6 +7,7 @@ clr_black = (0,0,0)
 clr_white = (255,255,255)
 clr_lightblue = (157,204,224)
 clr_darkgreen = (0,100,0)
+clr_darkred = (100,0,0)
 
 none = 0
 black = 1
@@ -22,6 +23,12 @@ board[3][4] = black
 board[4][3] = black
 board[4][4] = white
 
+def coordinate2square(X,Y):
+	x = X/size_square -1 #-0.5
+	y = Y/size_square -1 #-0.5
+	#x = (X - size_square - 0.5 * size_square)/size_square
+	#y = (Y - size_square - 0.5 * size_square)/size_square
+	return (x,y)
 
 def square2coordinate(x,y):
 	X = size_square + 0.5 * size_square + x*size_square
@@ -55,12 +62,6 @@ num_square*size_square))	#四角形を描画塗りつぶし
 (size_square*(8+1),size_square*1),
 (size_square*(8+1),size_square*9),5)	#直線の描画
 
-#	drawPiece(screen,3,3,white)
-#	drawPiece(screen,4,4,white)
-#	drawPiece(screen,3,4,black)
-#	drawPiece(screen,4,3,black)
-	
-
 def drawPiece(screen,x,y,piece):
 	(X,Y) = square2coordinate(x,y)
 	if piece == none:
@@ -80,37 +81,48 @@ def main():
 	screen.fill(clr_lightblue)	#画面を黒色に塗りつぶし
 	text = font.render("TEST", True, (255,255,255)) #描画する文字列の設定
 	#screen.blit(text,[20,100])	#文字列の表示位置
-	initboard(screen)
+	
 	
 	cnt = 0
 	clr = 2
 	while(1):
-		clock.tick(5)
-		#drawPiece(screen,cnt,cnt,clr)
-		board[cnt][cnt] = clr		
-		cnt+=1
-		if cnt>=num_square:
-			cnt=0
-			clr+=1
-			if clr>white:
-				clr=none
+		clock.tick(30)
+		initboard(screen)
+		#board[cnt][cnt] = clr		
+		#cnt+=1
+		#if cnt>=num_square:
+		#	cnt=0
+		#	clr+=1
+		#	if clr>white:
+		#		clr=none
+
 		for i in range(0,num_square):
 			for j in range(0,num_square):
-				(X_crd,Y_crd) = square2coordinate(i,j)
+		#		(X_crd,Y_crd) = square2coordinate(i,j)
 				drawPiece(screen,i,j,board[i][j])
-				#pygame.draw.ellipse(screen,clr_white,coordinate2ellipse(X_crd,Y_crd))	#楕円を描画塗りつぶし
-				#text_X = font.render(str(X_crd), True, clr_black)
-				#text_Y = font.render(str(Y_crd), True, clr_black)
-				#screen.blit(text_X,[X_crd,Y_crd-15])
-				#screen.blit(text_Y,[X_crd,Y_crd])
 				
 		pygame.display.update()		#画面を更新
 
 		#イベント処理
 		for event in pygame.event.get():
+			if event.type == MOUSEMOTION:
+				X_mouse,Y_mouse = event.pos
+				x_mouse,y_mouse = coordinate2square(X_mouse,Y_mouse)
+				#print x_mouse,y_mouse
+				X_mouse,Y_mouse = square2coordinate(x_mouse,y_mouse)
+				
+				pygame.draw.rect(screen,clr_darkred,
+Rect(X_mouse - size_square/2,
+Y_mouse - size_square/2,
+size_square,
+size_square))
 			if event.type == QUIT:	#閉じるボタンが押されたら終了
 				pygame.quit()		#Pygameの終了（画面閉じられる）
 				sys.exit()
+			if event.type == KEYDOWN:
+				if event.key == K_ESCAPE:
+					pygame.quit()
+					sys.exit()
 
 if __name__ == "__main__":
 	main()
