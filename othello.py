@@ -22,12 +22,13 @@ size_dir_othelo = 50
 num_square = 8
 
 board = [[[0 for k in range(2)] for i in range(num_square)] for j in range(num_square)]
-print board
+
+print(board)
 board[3][3][0] = white
 board[3][4][0] = black
 board[4][3][0] = black
 board[4][4][0] = white
-print board
+print(board)
 
 def coordinate2square(X,Y):
 	x = X/size_square -1 #-0.5
@@ -122,7 +123,7 @@ def main():
 			if event.type == MOUSEMOTION:
 				X_mouse,Y_mouse = event.pos
 				x_mouse,y_mouse = coordinate2square(X_mouse,Y_mouse)
-				print x_mouse,y_mouse
+				print(x_mouse,y_mouse)
 				X_mouse,Y_mouse = square2coordinate(x_mouse,y_mouse)
 				
 				pygame.draw.rect(screen,clr_darkgreen,
