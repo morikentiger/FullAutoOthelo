@@ -31,8 +31,8 @@ board[4][4][0] = white
 print(board)
 
 def coordinate2square(X,Y):
-	x = X/size_square -1 #-0.5
-	y = Y/size_square -1 #-0.5
+	x = int(X/size_square -1 )#-0.5
+	y = int(Y/size_square -1 )#-0.5
 	#x = (X - size_square - 0.5 * size_square)/size_square
 	#y = (Y - size_square - 0.5 * size_square)/size_square
 	return (x,y)
@@ -62,7 +62,8 @@ def drawboard(screen):
 			(size_square*(i+1),size_square*1),
 			(size_square*(i+1),size_square*9),5)	#直線の描画
 			drawPiece(screen,i,j,board[i][j][0])
-			drawPiece(screen,i,j,board[i][j][1])
+			if board[i][j][0]==none:
+				drawPiece(screen,i,j,board[i][j][1])
 	
 	pygame.draw.line(screen,clr_black,
 	(size_square*1,size_square*(8+1)),
@@ -131,13 +132,15 @@ def main():
 				Y_mouse_past - size_square/2,
 				size_square,
 				size_square))
-				board[x_mouse_past][y_mouse_past][1]=none
+				if (x_mouse_past>=0 and x_mouse_past<num_square and y_mouse_past>=0 and y_mouse_past<num_square):
+					board[x_mouse_past][y_mouse_past][1]=none
 				pygame.draw.rect(screen,clr_darkred,
 				Rect(X_mouse - size_square/2,
 				Y_mouse - size_square/2,
 				size_square,
 				size_square))
-				board[x_mouse][y_mouse][1]=mouse
+				if (x_mouse>=0 and x_mouse<num_square and y_mouse>=0 and y_mouse<num_square):
+					board[x_mouse][y_mouse][1]=mouse
 				x_mouse_past = x_mouse
 				y_mouse_past = y_mouse
 				X_mouse_past = X_mouse
